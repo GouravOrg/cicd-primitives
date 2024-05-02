@@ -9,11 +9,13 @@ on:
       folder_dev:
         required: true
         type: string
+        # modified the value to false
       folder_uat:
-        required: true
+        required: false
         type: string
+        # modified the value to false
       folder_prd:
-        required: true
+        required: false
         type: string
     secrets:
       CLIENT_ID:
@@ -22,7 +24,7 @@ on:
         required: true
 jobs:
   Get-CiCd-Primitives:
-    runs-on: uipath-cli
+    runs-on: self-hosted
     steps:
       - name: Checkout the latest version of the CiCd primitives
         uses: actions/checkout@v3
@@ -35,7 +37,7 @@ jobs:
         run: Write-Host ( "Change in branch? ${{ github.head_ref || github.ref_name }}" + " ${{github.sha}}".Substring(0, 8) )
   Prepare-Environment:
     needs: Get-CiCd-Primitives
-    runs-on: uipath-cli
+    runs-on: self-hosted
     outputs:
       tenantName: ${{ steps.envvars.outputs.tenantName }}
       folderName: ${{ steps.envvars.outputs.folderName }}
@@ -85,7 +87,7 @@ jobs:
           "baseurl=$baseurl" >> $env:GITHUB_OUTPUT
   Run-Checks-And-Workflow-Analyzer:
     needs: [Prepare-Environment]
-    runs-on: uipath-cli
+    runs-on: self-hosted
     outputs:
       finalVersionProcess: ${{ steps.finalVersionProcess.outputs.finalVersionProcess }}
     env:
@@ -117,7 +119,7 @@ jobs:
           uipcli package analyze "$pwd\project.json" --analyzerTraceLevel "Error" --orchestratorUrl "$($BASE_URL)" --orchestratorTenant "${{ env.TENANT_NAME }}" --orchestratorAccountForApp  "${{ vars.ORG_NAME }}" --orchestratorApplicationId  "${{ secrets.CLIENT_ID }}" --orchestratorApplicationSecret "${{ secrets.CLIENT_SECRET }}" --orchestratorApplicationScope "${{ vars.SCOPES }}"
   Build-RPA-And-Test-Packages:
     needs: [Prepare-Environment, Run-Checks-And-Workflow-Analyzer]
-    runs-on: uipath-cli
+    runs-on: self-hosted
     outputs:
       nugetPath: ${{ steps.nugetPath.outputs.nugetPath }}
       nugetTestPath: ${{ steps.nugetTestPath.outputs.nugetTestPath }}
@@ -158,7 +160,7 @@ jobs:
           "nugetTestPath=$nugetTestPath" >> $env:GITHUB_OUTPUT
   Upload-Packages:
     needs: [Prepare-Environment, Build-RPA-And-Test-Packages]
-    runs-on: uipath-cli
+    runs-on: self-hosted
     env:
       BASE_URL: ${{needs.Prepare-Environment.outputs.baseurl}}
       TENANT_NAME: ${{needs.Prepare-Environment.outputs.tenantName}}
