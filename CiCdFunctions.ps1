@@ -52,7 +52,8 @@ function AuthenticateToCloudAndGetBearerTokenClientCredentials([string]$clientId
     Write-Host $clientSecret
     Write-Host $scopes
     Write-Host $identityServer
-    Write-Host $clietnId
+    Write-Host $clientId
+    Write-Host $tenantName
     $body = @{"grant_type"="client_credentials"; "client_id"="910364da-0cd1-44b1-84ff-e299d241c417"; "client_secret"="J%j$mx!F4GRPHsr_";"scope"="$($scopes)"}
     $headers = @{}
     
