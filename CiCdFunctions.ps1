@@ -52,7 +52,7 @@ function AuthenticateToCloudAndGetBearerTokenClientCredentials([string]$clientId
     $body = @{"grant_type"="client_credentials"; "client_id"="$($clientId)"; "client_secret"="$($clientSecret)";"scope"="$($scopes)"}
     $headers = @{}
     
-    $uri = $identityServer
+    $uri = "https://cloud.uipath.com/identity/_connect/token"
     $response = PostOrchApi -bearerToken "" -uri $uri -headers $headers -body $body -contentType "application/x-www-form-urlencoded" -debug $debug
     if($debug) {
         Write-Host $response
