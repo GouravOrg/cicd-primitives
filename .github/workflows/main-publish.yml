@@ -99,9 +99,15 @@ jobs:
         id: beartok
         shell: pwsh
         run: |
-          . .\CiCd\CiCdFunctions.ps1
-          $bearTok = AuthenticateToCloudAndGetBearerTokenClientCredentials -clientId "${{ secrets.CLIENT_ID }}" -clientSecret "${{ secrets.CLIENT_SECRET }}" -scopes "${{ vars.SCOPES }}" -tenantName "${{ env.TENANT_NAME }}" -identityServer "${{ vars.IDENTITY_SERVER }}"
-          "BEAR_TOK=$beartok" >> $env:GITHUB_ENV
+         # . .\CiCd\CiCdFunctions.ps1
+         # $bearTok = AuthenticateToCloudAndGetBearerTokenClientCredentials -clientId "${{ secrets.CLIENT_ID }}" -clientSecret "${{ secrets.CLIENT_SECRET }}" -scopes "${{ vars.SCOPES }}" -tenantName "${{ env.TENANT_NAME }}" -identityServer "${{ vars.IDENTITY_SERVER }}"
+         # "BEAR_TOK=$beartok" >> $env:GITHUB_ENV
+         $body = @{"grant_type"="client_credentials"; "client_id"="910364da-0cd1-44b1-84ff-e299d241c417"; "client_secret"="J%j$mx!F4GRPHsr_";"scope"="$($scopes)"}
+         $headers = @{}
+         $uri = "https://cloud.uipath.com/identity_/connect/token"
+         $response = PostOrchApi -bearerToken "" -uri $uri -headers $headers -body $body -contentType "application/x-www-form-urlencoded" -debug $debug
+         Write-Host $response
+    
       - name: Get Latest version of process
         id: finalVersionProcess
         shell: pwsh
