@@ -59,7 +59,8 @@ jobs:
         id: envvars
         shell: pwsh
         run: |
-          if ( "${{ inputs.environment }}" -eq "dev")
+        # modified from dev to main to meet my requirements. 
+          if ( "${{ inputs.environment }}" -eq "main")
           {
             $tenantName = "${{ vars.TENANT_NAME_DEV }}"
             $folderName = "${{ inputs.folder_dev }}"
