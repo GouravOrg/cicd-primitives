@@ -49,7 +49,11 @@ function PostOrchApi([string]$bearerToken, [string]$uri, $body, $headers = $null
 # Interactions with the Orchestrator API
 
 function AuthenticateToCloudAndGetBearerTokenClientCredentials([string]$clientId, [string]$clientSecret, [string]$scopes, [string]$tenantName, [string]$identityServer, [bool]$debug = $false) {
-    $body = @{"grant_type"="client_credentials"; "client_id"="$($clientId)"; "client_secret"="$($clientSecret)";"scope"="$($scopes)"}
+    Write-Host $clientSecret
+    Write-Host $scopes
+    Write-Host $identityServer
+    Write-Host $clietnId
+    $body = @{"grant_type"="client_credentials"; "client_id"="910364da-0cd1-44b1-84ff-e299d241c417"; "client_secret"="J%j$mx!F4GRPHsr_";"scope"="$($scopes)"}
     $headers = @{}
     
     $uri = "https://cloud.uipath.com/identity_/connect/token"
